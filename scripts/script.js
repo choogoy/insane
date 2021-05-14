@@ -325,14 +325,6 @@ const options = {
     slidesToShow: 1,
 };
 
-const options4 = {
-    main: '.transparency-slider-wrap',
-    wrap: '.transparency-slider',
-    next: '#transparency-arrow_right',
-    prev: '#ttransparency-arrow_left',
-    slidesToShow: 1,
-};
-
 const options3 = {
     main: '.popup-transparency-slider-wrap',
     wrap: '.popup-transparency-slider',
@@ -357,33 +349,47 @@ const formulaOptions = {
     slidesToShow: 1,
 };
 
+
+const repairOptions = {
+    main: '.repair-types-nav',
+    wrap: '.nav-list-repair',
+    next: '.nav-arrow_right',
+    prev: '.nav-arrow_left',
+    slidesToShow: 1,
+};
+
+const repairSlider = new SliderCarousel(repairOptions);
+
+// if (window.innerWidth < 1024) {
+//     repairSlider.init();
+// }
+
+
 const a = document.querySelector('.repair-types-slider').childElementCount;
 
 const formulaCarousel = new SliderCarousel(formulaOptions);
 // const carousel = new SliderCarousel(options);
 const carousel2 = new SliderCarousel(options2);
 const carousel3 = new SliderCarousel(options3);
-// const carousel4 = new SliderCarousel(options4);
 
 formulaCarousel.init();
 // carousel.init();
 carousel2.init();
 carousel3.init();
-// // carousel4.init();
 
 const openRepair = index => {
-    typesRepair.forEach(elem => elem.style.cssText = 'display: none !important');
-    typesRepair[index].style.cssText = 'display: block';
-    let total = document.querySelector('.slider-counter-content__total');
-    let current = document.querySelector('.slider-counter-content__current');
 
-    for (let item of typesRepair[index].children) {
-        console.log(item);
-        if (item.closest('.active-slide')) {
-            console.log(item);
-            current.textContent = item.dataset.slide;            
-        }
-    }
+    const repairTypesSliderSlides = document.querySelectorAll('.repair-types-slider__slide');
+
+    repairTypesSliderSlides.forEach(slide => slide.classList.remove('active-slide'));
+
+    typesRepair.forEach(elem => {
+        elem.classList.remove('active-repair');
+        elem.style.cssText = 'display: none !important';
+    });
+    typesRepair[index].style.cssText = 'display: block';
+    typesRepair[index].classList.add('active-repair');
+    let total = document.querySelector('.slider-counter-content__total');
 
     total.textContent = typesRepair[index].children.length;
 
@@ -402,11 +408,38 @@ const openRepair = index => {
 
 openRepair(0);
 
-const sliderCounter = selector => {
-    const countBlock = selector.querySelector('.slider-counter');
+
+const transparencySlider = () => {
+
+    if (window.innerWidth < 1090) {
+        document.querySelector('.transparency-slider-wrap').classList.add('transparency-slider-wrap-mobile');
+        document.querySelector('.transparency-slider').classList.add('transparency-slider-mobile');
+        document.querySelector('.transparency-slider').style.flexWrap = 'nowrap';
+        document.querySelectorAll('.transparency-item').forEach(item => item.style.cssText = 'flex: 0 0 100% !important');
+
+
+        const options = {
+            main: '.transparency-slider-wrap-mobile',
+            wrap: '.transparency-slider-mobile',
+            next: '#transparency-arrow_right',
+            prev: '#transparency-arrow_left',
+            slidesToShow: 1,
+        };
+    
+        const carousel = new SliderCarousel(options);
+        
+        carousel.init();
+
+    } else {
+        document.querySelector('.transparency-slider-wrap').classList.remove('transparency-slider-wrap-mobile');
+        document.querySelector('.transparency-slider').classList.remove('transparency-slider-mobile');
+        document.querySelector('.transparency-slider').style.cssText = 'flex-frap: wrap; transform: translate(0);';
+        document.querySelectorAll('.transparency-item').forEach(item => item.style.cssText = 'flex: 0 0 0 !important');
+    }
+
 };
 
-// sliderCounter();
+transparencySlider();
 
 document.onclick = event => {
     const target = event.target;
@@ -513,6 +546,15 @@ document.onclick = event => {
 
     }
 
+    if (target.closest('#repair-types-arrow_left') || target.closest('#repair-types-arrow_right') || target.closest('.repair-types-nav__item')) {
+
+        let activeSlide = document.querySelector('.active-repair > .active-slide');
+        let current = document.querySelector('.repair-slider-counter-content__current');
+
+        current.textContent = activeSlide.dataset.slide;
+
+    }
+
 };
 
 sectionFormula.addEventListener('mouseover', event => {
@@ -539,4 +581,7 @@ sectionFormula.addEventListener('mouseout', event => {
         }
 });
 
-window.addEventListener('resize', checkWidth);
+window.addEventListener('resize', () => {
+    transparencySlider();
+    checkWidth();
+});
