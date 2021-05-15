@@ -14,6 +14,7 @@ const sectionFormula = document.getElementById('formula');
 const navListRepair = document.querySelector('.nav-list-repair');
 const typesRepair = document.querySelectorAll('.types-repair');
 const repairTypesNavItems = document.querySelectorAll('.repair-types-nav__item');
+const switchInner = document.getElementById('switch-inner');
 
 const maskPhone = (selector, masked = '+7 (___) ___-__-__') => {
 	const elems = document.querySelectorAll(selector);
@@ -408,7 +409,6 @@ const openRepair = index => {
 
 openRepair(0);
 
-
 const transparencySlider = () => {
 
     if (window.innerWidth < 1090) {
@@ -427,7 +427,7 @@ const transparencySlider = () => {
         };
     
         const carousel = new SliderCarousel(options);
-        
+
         carousel.init();
 
     } else {
@@ -439,6 +439,66 @@ const transparencySlider = () => {
 
 };
 
+const repairNavSlider = () => {
+
+    if (window.innerWidth < 1024) {
+
+        document.querySelector('.repair-types-nav').classList.add('.repair-types-nav-slider');
+        document.querySelector('.nav-list-repair').classList.add('.nav-list-repair-slider');
+        document.querySelector('.nav-list-repair-slider').style.cssText = 'flex-wrap: nowrap;';
+        document.querySelectorAll('.repair-types-nav__item').forEach(item => item.style.cssText = 'padding: 0 20px; justify-content: flex-start;');
+
+        const options = {
+            main: '.repair-types-nav-slider',
+            wrap: '.nav-list-repair-slider',
+            next: '#nav-arrow-repair-right_base',
+            prev: '#nav-arrow-repair-left_base',
+            slidesToShow: 1,
+        };
+    
+        const carousel = new SliderCarousel(options);
+
+        carousel.init();
+
+    } else {
+
+        document.querySelector('.repair-types-nav').classList.remove('.repair-types-nav-slider');
+        document.querySelector('.nav-list-repair').classList.remove('.nav-list-repair-slider');
+        document.querySelectorAll('.repair-types-nav__item').forEach(item => item.classList.remove('glo-slider__item'));
+        document.querySelector('.nav-list-repair').style.cssText = 'flex-wrap: wrap;';
+    }  
+
+};
+
+
+const tabRepairSlider = () => {
+
+    if (window.innerWidth < 1024) {
+
+        document.querySelector('.nav-list-popup-repair').style.cssText = 'flex-wrap: nowrap;';
+        document.querySelectorAll('.popup-repair-types-nav__item').forEach(item => item.style.cssText = 'justify-content: flex-start; padding: 0 20px;');
+
+        const options = {
+            main: '.nav-popup-repair-types',
+            wrap: '.nav-list-popup-repair',
+            next: '#nav-arrow-popup-repair_right',
+            prev: '#nav-arrow-popup-repair_left',
+            slidesToShow: 1,
+        };
+    
+        const carousel = new SliderCarousel(options);
+
+        carousel.init();
+    } else {
+        document.querySelectorAll('.popup-repair-types-nav__item').forEach(item => item.classList.remove('glo-slider__item'));
+        document.querySelector('.nav-list-popup-repair').style.cssText = 'flex-wrap: wrap; justify-content: center;';
+    }
+
+};
+
+tabRepairSlider();
+
+repairNavSlider();
 transparencySlider();
 
 document.onclick = event => {
@@ -480,6 +540,7 @@ document.onclick = event => {
     if (target.closest('.no-overflow')) {
         closeMenu();
         popupRepairTypes.style.visibility = 'visible';
+        popupRepairTypes.classList.add('open');
     }
 
     if (target.closest('div.popup-menu-nav__item>a.menu-link') || target.closest('.button-footer > a')) {
@@ -489,32 +550,38 @@ document.onclick = event => {
         closeMenu();
     }
 
-    if (target.closest('.popup-repair-types > .close') || target.closest('.popup-repair-types-nav__title > .close')) {
+    if (target.closest('.popup-repair-types > .close') || target.closest('.popup-repair-types-nav__title > .close') || target.classList.contains('open')) {
         popupRepairTypes.style.visibility = 'hidden';
     }
 
-    if (target.closest('span.link-privacy')) {
+    if (target.closest('.link-privacy')) {
         popupPrivacy.style.visibility = 'visible';
+        popupPrivacy.classList.add('open');
     }
 
-    if (target.closest('.popup-dialog-privacy > .close') || target.closest('.popup-privacy > .close')) {
+    if (target.closest('.popup-dialog-privacy > .close') || target.closest('.popup-privacy > .close') || target.classList.contains('open')) {
         popupPrivacy.style.visibility = 'hidden';
+        popupPrivacy.classList.remove('open');
     }
 
     if (target.closest('.button_wide')) {
         popupConsultation.style.visibility = 'visible';
+        popupConsultation.classList.add('open');
     }
 
-    if (target.closest('.close-consultation')) {
+    if (target.closest('.close-consultation') || target.classList.contains('open')) {
         popupConsultation.style.visibility = 'hidden';
+        popupConsultation.classList.remove('open');
     }
 
     if (target.closest('.transparency-item__img')) {
         popupTransparency.style.visibility = 'visible';
+        popupTransparency.classList.add('open');
     }
 
-    if (target.closest('.popup-transparency > .close')) {
+    if (target.closest('.popup-transparency > .close') || target.classList.contains('open')) {
         popupTransparency.style.visibility = 'hidden';
+        popupTransparency.classList.remove('open');
     }
 
     if (target.closest('.close-thank')) {
@@ -555,6 +622,13 @@ document.onclick = event => {
 
     }
 
+    if (target.closest('.popup-repair-types-nav__item')) {
+        document.querySelectorAll('.popup-repair-types-nav__item').forEach(item => item.classList.remove('active'));
+        console.log('tab');
+        target.classList.add('active');
+        switchInner.textContent = target.textContent;
+    }
+
 };
 
 sectionFormula.addEventListener('mouseover', event => {
@@ -562,10 +636,10 @@ sectionFormula.addEventListener('mouseover', event => {
     const a = event.target.closest('.formula-item__icon');
 
         if (a) {
-            a.firstElementChild.style.cssText = `visibility: visible; opacity: 1; transition: opacity 0.5s; top: ${a.parentNode.clientHeight + 20}px; z-index: 20`;
+            a.firstElementChild.style.cssText = `visibility: visible; opacity: 1; transition: opacity 0.5s; top: ${a.parentNode.clientHeight + 20}px;`;
 
             if (a.parentNode.getBoundingClientRect().top < a.firstElementChild.clientHeight) {
-                a.firstElementChild.style.cssText = `visibility: visible; opacity: 1; transition: opacity 0.5s; top: ${a.parentNode.clientHeight + 20}px; z-index: 20`;
+                a.firstElementChild.style.cssText = `visibility: visible; opacity: 1; transition: opacity 0.5s; top: ${a.parentNode.clientHeight + 20}px;`;
                 a.firstElementChild.classList.add('rotate');
             } else {
                 a.firstElementChild.style.cssText = 'visibility: visible; opacity: 1; transition: opacity 0.5s';
@@ -583,5 +657,7 @@ sectionFormula.addEventListener('mouseout', event => {
 
 window.addEventListener('resize', () => {
     transparencySlider();
+    repairNavSlider();
+    tabRepairSlider();
     checkWidth();
 });

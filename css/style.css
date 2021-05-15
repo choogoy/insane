@@ -8967,3 +8967,7 @@ strong {
 .slider-dots {
     display: none;
 }
+
+.link-privacy {
+    cursor: pointer;
+}
