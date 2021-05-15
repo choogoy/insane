@@ -1,5 +1,6 @@
 import SliderCarousel from './sliderCarousel.js';
 import openRepair from './openRepair.js';
+import repairData from './repairData.js';
 
 const repairNavSlider = () => {
 
@@ -61,10 +62,33 @@ const repairNavSlider = () => {
         }
     
         if (target.closest('.popup-repair-types-nav__item')) {
+
+            const table = document.querySelector('.popup-repair-types-content-table__list tbody');
+            const data = repairData();
     
             document.querySelectorAll('.popup-repair-types-nav__item').forEach(item => item.classList.remove('active'));
             target.classList.add('active');
             switchInner.textContent = target.textContent;
+
+            data.then(response => {
+                const res = response.filter(item => item.type === switchInner.textContent);
+                table.textContent = '';
+                
+                res.forEach(({ name, units, cost }) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'mobile-row';
+                    
+                    tr.innerHTML = `
+                        <td class="repair-types-name">${name}</td>
+                        <td class="mobile-col-title tablet-hide desktop-hide">Ед.измерения</td>
+                        <td class="mobile-col-title tablet-hide desktop-hide">Цена за ед.</td>
+                        <td class="repair-types-value">${units === 'м2' ? `м<sup>2</sup>` : units}</td>
+                        <td class="repair-types-value">${cost} руб.</td>`;
+
+                    table.insertAdjacentElement('beforeend', tr);
+                });
+
+            });
         }
     
     });

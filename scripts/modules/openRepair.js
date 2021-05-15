@@ -4,16 +4,17 @@ const openRepair = index => {
 
     const repairTypesSliderSlides = document.querySelectorAll('.repair-types-slider__slide');
     const typesRepair = document.querySelectorAll('.types-repair');
-
+    const total = document.querySelector('.slider-counter-content__total');
+    
     repairTypesSliderSlides.forEach(slide => slide.classList.remove('active-slide'));
 
     typesRepair.forEach(elem => {
         elem.classList.remove('active-repair');
         elem.style.cssText = 'display: none !important';
     });
+
     typesRepair[index].style.cssText = 'display: block';
     typesRepair[index].classList.add('active-repair');
-    let total = document.querySelector('.slider-counter-content__total');
 
     total.textContent = typesRepair[index].children.length;
 
