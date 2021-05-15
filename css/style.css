@@ -2263,7 +2263,7 @@ div.wave-block:nth-child(17):after {
     margin-left: auto;
     margin-right: auto;
     border-radius: 20px;
-    overflow: hidden;
+    /* overflow: hidden; */
     z-index: 1;
 }
 
