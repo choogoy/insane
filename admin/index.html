@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Вход</title>
 	<link rel="stylesheet" href="styles/index.css">
-
+	<script src="scripts/admin.js" type="module" defer></script>
 </head>
 <body class="body-auth">
 	<main class="main-auth">
@@ -15,12 +15,12 @@
 			<form>
 
 				<label class="label">
-					<input type="text"  id="name" class="input input-mb" placeholder="Имя">
+					<input type="text" id="login" class="input input-mb" name="relax-login" placeholder="Имя">
 					<span class="text-warning">Не верное имя</span>
 				</label>
 
 				<label class="label">
-					<input type="password" id="type" class="input" placeholder="Пароль">
+					<input type="password" id="password" name="relax-password" class="input" placeholder="Пароль">
 					<span class="text-warning">Не верный пароль</span>
 				</label>
 
